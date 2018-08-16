@@ -6,9 +6,9 @@ apply plugin: 'kotlin-android-extensions'
 
 // for dagger
 apply plugin: 'kotlin-kapt'
-kapt {
+/*kapt {
     generateStubs = true
-}
+}*/
 
 android {
     compileSdkVersion 28
