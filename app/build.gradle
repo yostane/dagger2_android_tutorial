@@ -4,6 +4,13 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+// for dagger
+apply plugin: 'kotlin-kapt'
+
+kapt {
+    generateStubs = true
+}
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -30,4 +37,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    def DAGGER_VERSION = "2.17"
+    // Dagger dependencies
+    implementation "com.google.dagger:dagger:${DAGGER_VERSION}"
+    kapt "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
+    // Dagger Android
+    implementation "com.google.dagger:dagger-android:${DAGGER_VERSION}"
+    implementation "com.google.dagger:dagger-android-support:${DAGGER_VERSION}" // if you use the support libraries
+    kapt "com.google.dagger:dagger-android-processor:${DAGGER_VERSION}"
 }

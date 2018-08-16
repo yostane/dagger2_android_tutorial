@@ -73,3 +73,5 @@ fastlane/readme.md
 /build
 /captures
 .externalNativeBuild
+vcs.xml
+misc.xml
