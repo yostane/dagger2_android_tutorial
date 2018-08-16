@@ -75,3 +75,4 @@ fastlane/readme.md
 .externalNativeBuild
 vcs.xml
 misc.xml
+org.eclipse.buildship.core.prefs
