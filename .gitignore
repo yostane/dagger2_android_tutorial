@@ -76,3 +76,5 @@ fastlane/readme.md
 vcs.xml
 misc.xml
 org.eclipse.buildship.core.prefs
+
+dagger-console-app/\.idea/
