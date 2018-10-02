@@ -40,7 +40,9 @@ class Thermosiphon @Inject constructor( private val heater: ElectricHeater ) {
     }
 }
 
-class CoffeeMaker @Inject constructor( private val heater: ElectricHeater, private val pump: Thermosiphon ) {
+class CoffeeMaker @Inject constructor(private val heater: ElectricHeater) {
+    @Inject private val pump: Thermosiphon
+
     init {
         println("++++CoffeeMaker instantiated")
     }
@@ -54,7 +56,6 @@ class CoffeeMaker @Inject constructor( private val heater: ElectricHeater, priva
     }
 }
 
-@Singleton
 @Component()
 interface CoffeeShop {
     fun maker(): CoffeeMaker
