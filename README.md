@@ -138,7 +138,7 @@ fun main(args: Array<String>) {
 
 The full code is [available here](https://github.com/yostane/dagger2_android_tutorial/blob/master/dagger-console-app/src/main/kotlin/Main.kt)
 
-This section illustrated three annotations: `@Inject`, `@Singleton` and `@Provides`.
+This section illustrated three annotations: `@Inject`, `@Singleton` and `@Component`. The next section focuses on the `@Provides` annotation.
 
 ## The @Provides annotation
 
