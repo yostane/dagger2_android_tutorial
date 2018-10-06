@@ -4,34 +4,26 @@ import dagger.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
-class ElectricHeater @Inject constructor() {
-
+@Singleton class ElectricHeater @Inject constructor() {
+    var heating: Boolean = false
     init {
         println("++++Electric header instantiated")
     }
-
-    var heating: Boolean = false
-
+    val isHot get() = heating
     fun on() {
         println("Electric header on")
         this.heating = true
     }
-
     fun off() {
         println("Electric header off")
         this.heating = false
     }
-
-    val isHot get() = heating
 }
 
 class Thermosiphon @Inject constructor( private val heater: ElectricHeater ) {
     init {
         println("++++Thermosiphon instantiated")
     }
-
-
     fun pump() {
         println("Thermosiphon is pumping")
         if (heater.isHot) {
@@ -40,12 +32,12 @@ class Thermosiphon @Inject constructor( private val heater: ElectricHeater ) {
     }
 }
 
-class CoffeeMaker @Inject constructor(private val heater: ElectricHeater, private val pump: Thermosiphon) {
-
+class CoffeeMaker @Inject constructor() {
+    @Inject lateinit var heater: ElectricHeater
+    @Inject lateinit var pump: Thermosiphon
     init {
         println("++++CoffeeMaker instantiated")
     }
-
     fun brew() {
         println("Brewing coffee")
         heater.on()
@@ -55,9 +47,7 @@ class CoffeeMaker @Inject constructor(private val heater: ElectricHeater, privat
     }
 }
 
-@Singleton
-@Component()
-interface CoffeeShop {
+@Singleton @Component() interface CoffeeShop {
     fun maker(): CoffeeMaker
 }
 

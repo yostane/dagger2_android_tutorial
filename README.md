@@ -1,17 +1,17 @@
-# Dependency injection on Android + Kotlin with Dagger 2
+# Dependency injection with Dagger 2 - Part1: @Inject and @Provides
 
 Dependency Injection, or DI in short, is a design pattern that allows to delegate the creation of objects and theire dependencies to another object or framework. It is gaining a lot interest in Android development. In this post, we will focus on dependency inection using the Dagger 2 Framework.
 
 ## Introduction
 
-Dagger 2 is a dependency injection developped by Google. It is not to be confused with the Dagger (or Dagger 1) Framework which is older and deprecated.
+Dagger 2 is a dependency injection developed by Google. It is not to be confused with the Dagger (or Dagger 1) Framework which is older and deprecated. _Please note the in the following I will also qualify Dagger 2 by Dagger (without numbers)_
 
-Dagger allow to define and configure dependcies using annotations. It also allows to inject into Android componenets such as Activities and Fragments thanks to Android-Dagger. In fact, Dagger 2 can be devided into different parts:
+Dagger allow to define and configure dependencies using annotations. It also allows to inject into Android components such as Activities and Fragments thanks to Android-Dagger. In fact, Dagger 2 can be divided into different parts:
 
-- Dagger: which provides the base dependency inejction capabilities
+- Dagger: which provides the base dependency injection capabilities
 - Dagger-Android: which allows to inject objects into Android components such as Activities and Fragments
 
-We will start by studying to inject dependencies on a console application. After that, we will create an Android project and use Dagger-Android to take full advantage of dependcy injection in every component of the app.
+We will start by studying to inject dependencies on a console application. After that, we will create an Android project and use Dagger-Android to take full advantage of dependency injection in every component of the app.
 
 The sample project of this guide are created using IntteliJ and Android Studio. The programming language is Kotlin.
 
@@ -61,31 +61,31 @@ Here is a summary of our first Dagger 2 annotations:
 - `@Inject` and `@Provides`: class that have this annotations are integrated in the dependency graph of Dagger.
 - `@Component`: used to annotate the interface that returns the root object of the graph.
 
-Let's apply this knowledge to our problem. In the following we specify the dependency graph only with `@Inject` annotation. The `@Provides` annotation offers more possibilities but requires more code. So, we will stick with `@Inject` here.
+## The @Inject annotation
+
+Let's apply this knowledge to our problem. The `@Provides` annotation offers more possibilities than `@Inject` but requires more code. Thus, in the following code snippet, we specify the dependency graph only with `@Inject` annotation.
 
 ```kotlin
-class ElectricHeater @Inject constructor() {
+@Singleton class ElectricHeater @Inject constructor() {
     var heating: Boolean = false
+    val isHot get() = heating
     fun on() {
         this.heating = true
     }
     fun off() {
         this.heating = false
     }
-    val isHot get() = heating
 }
-
 class Thermosiphon @Inject constructor( private val heater: ElectricHeater ) {
     fun pump() {
-        println("Thermosiphon is pumping")
         if (heater.isHot) {
             println("Heater is hot !!!")
         }
     }
 }
-
-class CoffeeMaker @Inject constructor(private val heater: ElectricHeater) {
-    @Inject private val pump: Thermosiphon
+class CoffeeMaker @Inject constructor() {
+    @Inject lateinit var heater: ElectricHeater
+    @Inject lateinit var pump: Thermosiphon
     fun brew() {
         println("Brewing coffee")
         heater.on()
@@ -96,7 +96,55 @@ class CoffeeMaker @Inject constructor(private val heater: ElectricHeater) {
 }
 ```
 
-## Dagger in an Android app
+Here is the explanation of the most important parts of the code:
+
+```kotlin
+@Singleton class ElectricHeater @Inject constructor()
+class Thermosiphon @Inject constructor( private val heater: ElectricHeater )
+class CoffeeMaker @Inject constructor()
+```
+
+Each class has an empty constructor with the `@Inject` annotation. This allows instances of these classes to be constructed by Dagger.
+
+The `@Singleton` annotation means that Dagger will create and maintain a single instance of the annotated class. This means that any time an `ElectricHeater` instance is needed, the same instance will be passed.
+
+The `heater` parameter of the `Thermosiphon` constructor will also be automatically injected by Dagger. In addition to injecting constructor parameters, Dagger also injects non-private instance variables that have the `@Inject` annotation as illustrated below.
+
+```kotlin
+class CoffeeMaker @Inject constructor() {
+    @Inject lateinit var heater: ElectricHeater
+    @Inject lateinit var pump: Thermosiphon
+}
+```
+
+Thanks to the different `@Inject` annotation, the Dagger dependency tree is well defined for the three classes. One question remains, how to get a `CoffeeMaker` maker generated by Dagger. This is done thanks to the `@Component` annotation as follows.
+
+```kotlin
+@Singleton @Component() interface CoffeeShop {
+    fun maker(): CoffeeMaker
+}
+```
+
+Dagger requires an interface that is annotated with the `@Componenet` annotation and defines a function that returns the Type of the class that we want to get an instance of. Dagger takes care of implementing the interface and its methods. The name of the generated class has the name as the interface with the **Dagger** prefix. So, in our case, we get a `DaggerCoffeeShop` class.
+
+Here is the code of the main function that requests an instance of a `CoffeeMaker` from Dagger.
+
+```kotlin
+fun main(args: Array<String>) {
+    val coffee = DaggerCoffeeShop.builder().build()
+    coffee.maker().brew()
+}
+```
+
+The full code is [available here](https://github.com/yostane/dagger2_android_tutorial/blob/master/dagger-console-app/src/main/kotlin/Main.kt)
+
+This section illustrated three annotations: `@Inject`, `@Singleton` and `@Provides`.
+
+## The @Provides annotation
+
+## Conclusion
+
+This article illustrated some of the most common and important Dagger annotations through a simple console app.
 
 ## Links
 
