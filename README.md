@@ -150,19 +150,19 @@ fun main(args: Array<String>) {
 }
 ```
 
-The full code is [available here](https://github.com/yostane/dagger2_android_tutorial/blob/master/dagger-console-app/src/main/kotlin/Main.kt)
+The full code is [available here](https://github.com/yostane/dagger2_android_tutorial/tree/master/dagger-console-inject)
 
-This section illustrated three annotations: `@Inject`, `@Singleton` and `@Component`. The next section focuses on the `@Provides` annotation.
+This section illustrated three annotations: `@Inject`, `@Singleton` and `@Component`. The next section proposes another solution for the problem that uses `@Provides` annotation.
 
 ## The @Provides annotation
 
 The `@Inject` annotation is concise and easy to use. However, there are cases where this annotation cannot be used:
 
 - Injecting an interface
-- Annotating classes from libraries
+- We cannot add `@Inject` to classes from libraries (because we need to modifiy the source code)
 - Objects that require configuration outside of the constructor (like objects generated with a factory)
 
-In this case, instantiate these object with Dagger using a module. It is a class that has the `@Module` annotation and defines methods annotated with the `@Provides` annotation. Annotated methods return instances of classes that cannot support the `@Inject` annotation.
+In this case, we instantiate Dagger allows to add these object to its graph using modules. A module is a class that has the `@Module` annotation and defines methods annotated with the `@Provides` annotation. Annotated methods return instances of classes that cannot support the `@Inject` annotation.
 
 To illustrate these annotations, suppose that we want to pass a `Heater` interface instead of the `ElectricHeater` implementation.
 
@@ -171,6 +171,10 @@ interface Heater {
     fun isHot() : Boolean
     fun on()
     fun off()
+}
+
+class ElectricHeater : Heater {
+    ...
 }
 
 class Thermosiphon @Inject constructor( private val heater: Heater ) {
@@ -195,7 +199,7 @@ Inside the `heaterProvider()` function, we can write the code that we want as lo
 
 Note that neither `Heater` nor `ElectricHeater` require any Dagger annotation, which means that we can inject classes from third party libraries and at the same time configure them.
 
-The last modification consifits of adding the module to the componenet as follows:
+The last modification consists of adding the module to the componenet as follows:
 
 ```kotlin
 @Singleton @Component(modules = [CoffeeMachineModule::class]) interface CoffeeShop {
@@ -205,7 +209,7 @@ The last modification consifits of adding the module to the componenet as follow
 
 We can now run the code again and it should work as before.
 
-Before concluding, I want to show an interesting possibilty with modules. We can add to easily a `FireCoffeeMaker` that uses a `FireHeater` by defining a new class, a module and a component as follows:
+Before concluding, I want to show an interesting possibilty with modules. In fact, we can easily add a `FireCoffeeMaker` that uses a `FireHeater` by defining a new class, a module that provides the new heater and a component as follows:
 
 ```kotlin
 class FireHeater : Heater {
@@ -233,7 +237,7 @@ class FireHeater : Heater {
 }
 ```
 
-We can try using both coffee makers in the main method.
+We can use both coffee makers in the main method.
 
 ```kotlin
 fun main(args: Array<String>) {
@@ -245,11 +249,11 @@ fun main(args: Array<String>) {
 }
 ```
 
-With this, we reach the conclusion of this noble introduction.
+With this, we reach the conclusion of this article.
 
 ## Conclusion
 
-This article illustrated main Dagger annotations that allow to configure and instantiante a dependency tree. The annotations are `@Inject`, `@Component`, `@Sungleton`, `@Provides` and `@Module`. We have seen that `@Inject` is more consice than `@Provides`+`@Module` but has less possibilities.
+This article illustrated the base Dagger annotations that allow to configure and instantiante a dependency tree. The annotations are `@Inject`, `@Component`, `@Sungleton`, `@Provides` and `@Module`. We have seen that `@Inject` is more consice than `@Provides`+`@Module` but has less possibilities.
 
 The different annotations were experimented using a Kotlin console app. I choose a console app over an Android because it is simpler to setup and test this way.
 
