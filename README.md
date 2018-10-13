@@ -21,7 +21,7 @@ compile "com.google.dagger:dagger:$dagger_version"
 kapt "com.google.dagger:dagger-compiler:$dagger_version"
 ```
 
-After that, configure IntelliJ to delegate build acions to Gradle in settings -> Build, execution, depolyment -> Build Tools -> Gradle -> Runner
+After that, configure IntelliJ to delegate build actions to Gradle in settings -> Build, execution, deployment -> Build Tools -> Gradle -> Runner
 
 ![delegate to gradle](./assets/gradle-build-kapt.png)
 
@@ -249,11 +249,13 @@ fun main(args: Array<String>) {
 }
 ```
 
+The full code is [available here](https://github.com/yostane/dagger2_android_tutorial/tree/master/dagger-console-provides)
+
 With this, we reach the conclusion of this article.
 
 ## Conclusion
 
-This article illustrated the base Dagger annotations that allow to configure and instantiante a dependency tree. The annotations are `@Inject`, `@Component`, `@Sungleton`, `@Provides` and `@Module`. We have seen that `@Inject` is more consice than `@Provides`+`@Module` but has less possibilities.
+This article illustrated the base Dagger annotations that allow to configure and instanciate a dependency tree. The annotations are `@Inject`, `@Component`, `@Singleton`, `@Provides` and `@Module`. We have seen that `@Inject` is more consice than `@Provides`+`@Module` but has less possibilities.
 
 The different annotations were experimented using a Kotlin console app. I choose a console app over an Android because it is simpler to setup and test this way.
 
