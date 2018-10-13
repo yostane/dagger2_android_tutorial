@@ -7,15 +7,15 @@ import javax.inject.Singleton
 @Singleton class ElectricHeater @Inject constructor() {
     var heating: Boolean = false
     init {
-        println("++++Electric header instantiated")
+        println("++++Electric heater instantiated")
     }
     val isHot get() = heating
     fun on() {
-        println("Electric header on")
+        println("Electric heater on")
         this.heating = true
     }
     fun off() {
-        println("Electric header off")
+        println("Electric heater off")
         this.heating = false
     }
 }
