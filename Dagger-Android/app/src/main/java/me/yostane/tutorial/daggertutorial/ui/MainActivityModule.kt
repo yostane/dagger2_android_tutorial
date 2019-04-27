@@ -8,7 +8,7 @@ import dagger.Binds
 import dagger.Module
 
 
-@Module(subcomponents = arrayOf(MainActivityComponent::class))
+@Module(subcomponents = [MainActivityComponent::class])
 abstract class MainActivityModule {
 
     @Binds

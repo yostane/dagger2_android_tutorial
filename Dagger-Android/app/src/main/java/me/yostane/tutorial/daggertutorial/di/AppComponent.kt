@@ -8,9 +8,9 @@ import me.yostane.tutorial.daggertutorial.ui.MainActivityModule
 
 
 @Singleton
-@Component(modules = arrayOf(AndroidSupportInjectionModule::class,
+@Component(modules = [AndroidSupportInjectionModule::class,
         AppModule::class,
-        MainActivityModule::class))
+        MainActivityModule::class])
 interface AppComponent {
 
     fun inject(app: DaggerTurorialApplication)
