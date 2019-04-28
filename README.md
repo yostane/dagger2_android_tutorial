@@ -1,4 +1,4 @@
-# Dependency injection with Dagger 2 - Part1: @Inject and @Provides
+# Dependency injection with Dagger 2 - Part 2: @Inject and @Provides
 
 Dependency Injection, or DI in short, is a design pattern that allows to delegate the creation of objects and their dependencies to another object or framework. It is gaining a lot of interest in Android application development. This post shows how to inject objects using Dagger 2 through a console app.
 
