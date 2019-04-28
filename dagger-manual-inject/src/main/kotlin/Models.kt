@@ -22,9 +22,7 @@ class ElectricHeater @Inject constructor() {
 }
 
 @Reusable
-class Thermosiphon @Inject constructor(private val heater: ElectricHeater) {
-
-    var name = ""
+class Thermosiphon @Inject constructor(private val heater: ElectricHeater, val name: String) {
 
     init {
         println("++++Thermosiphon $name instantiated")

@@ -1,28 +1,35 @@
 package com.example.dagger.kotlin
 
-import dagger.*
+import dagger.BindsInstance
+import dagger.Component
 import javax.inject.Inject
-import javax.inject.Singleton
 
 // Instance not managed by Dagger
 class CoffeeMakerUser {
     @Inject lateinit var coffeeMaker: CoffeeMaker
 }
 
-@Component interface CoffeeShop {
+@Component
+interface CoffeeShop {
     val coffeeMaker: CoffeeMaker
+
+    // Allows to return a new component instance
+    @Component.Factory interface Factory{
+        // We can define a 'create' method with custom parameters
+        // The @BindsInstance allows Dagger to inject this instance in its dependecy tree
+        // The method should return an instance of the component
+        fun create(@BindsInstance name: String): CoffeeShop
+    }
+
     // allows to inject obejct from Dagger graph to another object not in the dependy graph
     fun inject(coffeeMakerUser: CoffeeMakerUser)
 }
 
 fun main(args: Array<String>) {
-
-
-    val coffeeShop = DaggerCoffeeShop.create()
-    coffeeShop.coffeeMaker.pump.name = "My awesome siphon"
+    val coffeeShop = DaggerCoffeeShop.factory().create("My awesome thermosiphon")
     coffeeShop.coffeeMaker.brew()
 
-    val coffeeMakerUser = CoffeeMakerUser()
+    /*val coffeeMakerUser = CoffeeMakerUser()
     DaggerCoffeeShop.create().inject(coffeeMakerUser)
-    coffeeMakerUser.coffeeMaker.brew()
+    coffeeMakerUser.coffeeMaker.brew()*/
 }
