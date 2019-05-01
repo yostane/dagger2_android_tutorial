@@ -9,8 +9,7 @@ class CoffeeMakerUser {
     @Inject lateinit var coffeeMaker: CoffeeMaker
 }
 
-@Component
-interface CoffeeShop {
+@Component interface CoffeeShop {
     val coffeeMaker: CoffeeMaker
 
     // Allows to return a new component instance
@@ -21,15 +20,17 @@ interface CoffeeShop {
         fun create(@BindsInstance name: String): CoffeeShop
     }
 
-    // allows to inject obejct from Dagger graph to another object not in the dependy graph
-    fun inject(coffeeMakerUser: CoffeeMakerUser)
+    // allows to inject object from Dagger graph to another object not in the dependy graph
+    fun injectInto(coffeeMakerUser: CoffeeMakerUser)
 }
 
 fun main(args: Array<String>) {
     val coffeeShop = DaggerCoffeeShop.factory().create("My awesome thermosiphon")
     coffeeShop.coffeeMaker.brew()
 
-    /*val coffeeMakerUser = CoffeeMakerUser()
-    DaggerCoffeeShop.create().inject(coffeeMakerUser)
-    coffeeMakerUser.coffeeMaker.brew()*/
+    val coffeeMakerUser = CoffeeMakerUser()
+    coffeeShop.injectInto(coffeeMakerUser)
+
+    coffeeMakerUser.coffeeMaker.brew()
+
 }

@@ -52,7 +52,7 @@ interface CoffeeShop {
     // Allows to return a new component instance
     @Component.Factory
     interface Factory{
-        // We can define a 'create' method with custom parameters
+        // Declaration of a 'create' method with custom parameters
         // The @BindsInstance allows Dagger to inject this instance in its dependecy tree
         // The method should return an instance of the component
         fun create(@BindsInstance name: String): CoffeeShop
@@ -62,7 +62,50 @@ interface CoffeeShop {
 
 ## Injecting a Dagger managed object into a non Dagger managed one
 
-In this part, we investiguate the other way around. In other words, we have a Dagger component that manages a graph of objects and we want to inject on of those objects into an object that is not in
+In this part, we investigate the other way around.
+In other words, we will inject objects managed by Dagger into objects that are not in Dagger dependency tree.
+This situation happens when we use libraries that do not let the developer any way of instantiating their objects. In the following, we will learn how to do it with an example.
+
+Suppose that we have a class named `CoffeeMakerUser` that requires an instance of a `CoffeeMaker` and the following two constraints: we cannot define a custom constructor (no constructor injection) and we cannot insatiate it in a module.
+Taking these constraints into account, we can inject a `CoffeeMaker` into a `CoffeeMakerUser` as follows:
+
+- Add `@Inject` to the `CoffeeMakerUser` class.
+
+```kotlin
+class CoffeeMakerUser {
+    @Inject lateinit var coffeeMaker: CoffeeMaker
+}
+```
+
+- In the component add a function that takes a `CoffeeMakerUser` parameter. This function makes Dagger capable of injecting a `CoffeeMaker` from its dependency tree into a `CoffeeMakerUser`.
+
+@Component interface CoffeeShop {
+    val coffeeMaker: CoffeeMaker
+
+    // allows to inject object from Dagger graph to another object not in the dependy graph
+    fun injectInto(coffeeMakerUser: CoffeeMakerUser)
+}
+
+- After creating the component, call the the injection function by passing it the an instance of `CoffeeMakerUser`.
+
+```kotlin
+val coffeeShop = DaggerCoffeeShop.factory().create()
+val coffeeMakerUser = CoffeeMakerUser()
+coffeeShop.injectInto(coffeeMakerUser) // Injects objects into the coffeeMakerUser
+coffeeMakerUser.coffeeMaker.brew() // coffeeMakerUser can use the injected coffeeMaker
+```
+
+
+For example, Android `Activities` are instantiated by the Android SDK, thus Dagger cannot automatically inject into these objects.
+
+## Conclusion
+
+In addition to managing its own dependency tree, Dagger is capable of interacting with objects which are not part of it.
+In this post, we have first seen how to 
+
+[Using Factory to inject external objects](https://github.com/yostane/dagger2_android_tutorial/tree/master/03-dagger-console-binds)
+
+[Injecting into objects not managed by Dagger](https://github.com/yostane/dagger2_android_tutorial/tree/master/dagger-manual-inject)
 
 ## Links
 
