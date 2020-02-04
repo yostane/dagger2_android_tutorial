@@ -3,22 +3,18 @@ package me.yostane.tutorial.daggertutorial
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
-
-// Simple class that simulates a view model
-class MainViewModel @Inject constructor() {
-    fun greet() = "hello"
-}
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject lateinit var viewModel: MainViewModel
+    @Inject lateinit var coffeeMaker: CoffeeMaker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (applicationContext as DiTutorialApplication).appComponent.inject(this)
-
+        (applicationContext as DiTutorialApplication).appComponent.injectIntoMainActivity(this)
+        Log.d("Test", coffeeMaker.brew())
         setContentView(R.layout.activity_main)
-        Log.d("Test", viewModel.greet())
+        this.label.text = this.coffeeMaker.brew()
     }
 }

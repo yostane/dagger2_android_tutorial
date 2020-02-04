@@ -98,12 +98,14 @@ class CoffeeMakerUser {
 
 - In the component add a function that takes a `CoffeeMakerUser` parameter. This function makes Dagger capable of injecting a `CoffeeMaker` from its dependency tree into a `CoffeeMakerUser`.
 
+```kotlin
 @Component interface CoffeeShop {
     val coffeeMaker: CoffeeMaker
 
     // allows to inject object from Dagger graph to another object not in the dependy graph
     fun injectInto(coffeeMakerUser: CoffeeMakerUser)
 }
+```
 
 - After creating the component, call the the injection function by passing it the an instance of `CoffeeMakerUser`.
 
