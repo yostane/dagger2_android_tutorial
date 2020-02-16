@@ -1,6 +1,12 @@
 ﻿# Dependency injection with Dagger 2 - Part 3: Basic injection in an Android Application
 
-After exploring the basics of Dagger and some of its annotations in a console project, we are going to integrate Dagger in Android applications.
+Dagger is the dependency injection framework recommended by the [official documentation for most projects](https://developer.android.com/training/dependency-injection#choosing-right-di-tool).
+In previous posts we have studied the basics Dagger as well as some annotations in a console project.
+
+- [Dependency injection with Dagger 2: @Inject and @Provides](https://medium.com/@yostane/dependency-injection-with-dagger-2-inject-and-provides-ce21f7449ec5)
+- [Dagger 2: injecting into and from objects not managed by Dagger](https://blog.worldline.tech/2020/01/06/dagger2_inject_into_from.html)
+
+In this post, we are going to use this knowledge to setup Dagger in an Android project.
 
 ## Initial setup
 
