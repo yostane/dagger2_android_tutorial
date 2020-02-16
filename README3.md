@@ -1,5 +1,7 @@
 ﻿# Dependency injection with Dagger 2 - Part 3: Basic injection in an Android Application
 
+![logo](.assets/../assets/dagger-android.png)
+
 Dagger is the dependency injection framework recommended by the [official documentation for most projects](https://developer.android.com/training/dependency-injection#choosing-right-di-tool).
 In previous posts we have studied the basics Dagger as well as some annotations in a console project.
 
